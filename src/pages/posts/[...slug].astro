@@ -1,0 +1,114 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/PostLayout.astro';
+
+// Função para gerar rotas estáticas
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+
+  return blogEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: any;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+// Formatar data
+const formattedDate = new Intl.DateTimeFormat('pt-BR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(entry.data.pubDate);
+---
+
+<BaseLayout title={entry.data.title}>
+  <article class="max-w-3xl mx-auto px-6 py-12">
+    <!-- Header do Post -->
+    <header class="mb-12 space-y-6">
+      <h1 class="text-5xl md:text-6xl font-bold tracking-tight text-light-text dark:text-dark-text">
+        {entry.data.title}
+      </h1>
+
+      <!-- Meta Informações -->
+      <div class="flex flex-col md:flex-row md:items-center gap-4 text-light-subtext0 dark:text-dark-subtext0 text-sm">
+        <time datetime={entry.data.pubDate.toISOString()}>{formattedDate}</time>
+        <div class="w-1 h-1 rounded-full bg-light-surface1 dark:bg-dark-surface1 hidden md:block"></div>
+        <p>Leitura: ~5 min</p>
+      </div>
+
+      <!-- Imagem do Post -->
+      <div class="relative h-96 overflow-hidden rounded-lg">
+        <img src={entry.data.image} alt={entry.data.title} class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Descrição -->
+      <p class="text-xl text-light-subtext0 dark:text-dark-subtext0 leading-relaxed italic">
+        {entry.data.description}
+      </p>
+
+      <div class="h-1 w-16 bg-light-mauve dark:bg-dark-mauve rounded-full"></div>
+    </header>
+
+    <!-- Placeholder para anúncio lateral -->
+    <div class="mb-8 p-4 rounded-lg border-2 border-dashed border-light-surface1 dark:border-dark-surface1">
+      <p class="text-light-subtext0 dark:text-dark-subtext0 text-sm italic">
+        &lt;!-- Espaço reservado --&gt;
+      </p>
+    </div>
+
+    <!-- Conteúdo do Post -->
+    <div class="prose dark:prose-invert prose-lg max-w-none mb-12">
+      <Content />
+    </div>
+
+    <!-- Placeholder para anúncio entre blocos -->
+    <div class="my-12 p-4 rounded-lg border-2 border-dashed border-light-surface1 dark:border-dark-surface1">
+      <p class="text-light-subtext0 dark:text-dark-subtext0 text-sm italic">
+        &lt;!-- Espaço reservado --&gt;
+      </p>
+    </div>
+
+    <!-- Navegação para posts anteriores/próximos -->
+    <nav class="mt-16 pt-8 border-t border-light-surface1 dark:border-dark-surface1">
+      <div class="flex justify-between">
+        <a href="/" class="inline-block px-4 py-2 rounded-lg bg-light-surface0 dark:bg-dark-surface1 text-light-text dark:text-dark-text hover:bg-light-surface1 dark:hover:bg-dark-surface0 transition-colors duration-300">
+          ← Voltar aos posts
+        </a>
+      </div>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style is:global>
+  /* Estilos adicionais para o conteúdo em Markdown */
+  .prose {
+    @apply text-light-text dark:text-dark-text;
+  }
+
+  .prose h2,
+  .prose h3 {
+    @apply text-light-text dark:text-dark-text;
+  }
+
+  .prose a {
+    @apply text-light-mauve dark:text-dark-mauve;
+  }
+
+  .prose code {
+    @apply bg-light-surface0 dark:bg-dark-surface0 text-light-sapphire dark:text-dark-sky;
+  }
+
+  .prose pre {
+    @apply bg-light-surface0 dark:bg-dark-surface1;
+  }
+
+  .prose blockquote {
+    @apply border-light-mauve dark:border-dark-mauve text-light-subtext0 dark:text-dark-subtext0;
+  }
+</style>

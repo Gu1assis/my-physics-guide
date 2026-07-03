@@ -1,0 +1,159 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title ? `${title} | Guia para a Física` : 'Guia para a Física'}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-white dark:bg-dark-base text-gray-900 dark:text-dark-text transition-colors duration-300 font-mono">
+    <script>
+      // Script de persistência de tema (light/dark)
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+    </script>
+
+    <div class="min-h-screen flex flex-col">
+      <Header />
+      
+      <main class="flex-1">
+        <slot />
+      </main>
+
+      <Footer />
+    </div>
+
+    <!-- Botão Voltar ao Topo -->
+    <button
+      id="scrollToTop"
+      class="fixed bottom-8 right-8 p-3 rounded-full bg-light-surface0 dark:bg-dark-surface0 border border-light-surface2 dark:border-dark-surface1 text-light-text dark:text-dark-text opacity-0 invisible transition-all duration-300 hover:scale-110 z-40"
+      aria-label="Voltar ao topo"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+      </svg>
+    </button>
+
+    <style is:global>
+      /* Estilos Globais */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        line-height: 1.6;
+        letter-spacing: 0.5px;
+      }
+
+      /* Tipografia fluida */
+      h1 {
+        @apply text-4xl md:text-5xl font-bold mb-6 tracking-tight;
+      }
+
+      h2 {
+        @apply text-3xl md:text-4xl font-bold mb-4 mt-8 tracking-tight;
+      }
+
+      h3 {
+        @apply text-2xl md:text-3xl font-bold mb-3 mt-6 tracking-tight;
+      }
+
+      h4,
+      h5,
+      h6 {
+        @apply text-lg font-bold mb-2 mt-4 tracking-tight;
+      }
+
+      p {
+        @apply mb-4 leading-relaxed;
+      }
+
+      a {
+        @apply underline decoration-wavy decoration-light-mauve dark:decoration-dark-mauve decoration-2 transition-colors duration-300 hover:text-light-mauve dark:hover:text-dark-mauve;
+      }
+
+      blockquote {
+        @apply border-l-4 border-light-mauve dark:border-dark-mauve pl-4 py-2 my-6 italic text-light-subtext0 dark:text-dark-subtext0;
+      }
+
+      code {
+        @apply bg-light-surface0 dark:bg-dark-surface0 px-2 py-1 rounded text-sm font-mono text-light-sapphire dark:text-dark-sky;
+      }
+
+      pre {
+        @apply bg-light-surface0 dark:bg-dark-surface1 p-4 rounded-lg overflow-x-auto my-4 border border-light-surface2 dark:border-dark-surface2;
+      }
+
+      ul,
+      ol {
+        @apply ml-6 mb-4;
+      }
+
+      li {
+        @apply mb-2;
+      }
+
+      /* Scroll Behavior */
+      ::-webkit-scrollbar {
+        @apply w-2;
+      }
+
+      ::-webkit-scrollbar-track {
+        @apply bg-light-base dark:bg-dark-base;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        @apply bg-light-surface1 dark:bg-dark-surface1 rounded-full hover:bg-light-overlay0 dark:hover:bg-dark-overlay0;
+      }
+    </style>
+
+    <script>
+      // Lógica do botão de voltar ao topo
+      const scrollToTopBtn = document.getElementById('scrollToTop');
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          scrollToTopBtn?.classList.remove('opacity-0', 'invisible');
+          scrollToTopBtn?.classList.add('opacity-100', 'visible');
+        } else {
+          scrollToTopBtn?.classList.add('opacity-0', 'invisible');
+          scrollToTopBtn?.classList.remove('opacity-100', 'visible');
+        }
+      });
+
+      scrollToTopBtn?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    </script>
+  </body>
+</html>

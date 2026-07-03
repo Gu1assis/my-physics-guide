@@ -1,0 +1,43 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  image: string;
+  url: string;
+}
+
+const { title, description, image, url } = Astro.props;
+---
+
+<a href={url} class="no-underline">
+  <article
+    class="group relative overflow-hidden rounded-lg border border-light-surface1 dark:border-dark-surface1 transition-all duration-300 hover:scale-105 hover:shadow-lg dark:hover:shadow-md"
+  >
+    <!-- Imagem do Post -->
+    <div class="relative h-48 overflow-hidden bg-light-surface0 dark:bg-dark-surface0">
+      <img src={image} alt={title} class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" />
+    </div>
+
+    <!-- Conteúdo do Card -->
+    <div class="relative z-10 bg-white dark:bg-dark-mantle p-6">
+      <!-- Efeito de borda iluminada (Dark mode) -->
+      <div class="absolute inset-0 bg-gradient-to-br from-dark-mauve/10 to-transparent opacity-0 dark:opacity-100 group-hover:opacity-30 transition-opacity duration-300 pointer-events-none rounded-lg"></div>
+
+      <h3 class="text-xl font-bold mb-3 text-light-text dark:text-dark-text line-clamp-2 group-hover:text-light-mauve dark:group-hover:text-dark-mauve transition-colors duration-300">
+        {title}
+      </h3>
+
+      <p class="text-light-subtext0 dark:text-dark-subtext0 line-clamp-3 leading-relaxed">
+        {description}
+      </p>
+
+      <!-- Indicador Visual (seta) -->
+      <div class="mt-4 flex items-center text-light-mauve dark:text-dark-mauve font-semibold">
+        <span>Ler mais</span>
+        <svg class="w-4 h-4 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </div>
+    </div>
+  </article>
+</a>

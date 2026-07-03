@@ -1,0 +1,21 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+
+---
+
+<header class="sticky top-0 z-50 bg-white dark:bg-dark-mantle border-b border-light-surface1 dark:border-dark-surface0 transition-colors duration-300">
+  <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <!-- Logo / Título à esquerda -->
+    <a
+      href="/"
+      class="text-2xl font-bold tracking-tight text-light-text dark:text-dark-text no-underline hover:text-light-mauve dark:hover:text-dark-mauve transition-colors duration-300"
+    >
+      Guia para a Física
+    </a>
+
+    <!-- Botão de Toggle de Tema à direita -->
+    <ThemeToggle/>
+  </div>
+</header>
+
+
